@@ -1,1 +1,15 @@
-hi
+weekly_metrics_fact_sku
+
+1. Logger_setup  2.safe_date_convert(d) -->date format(output)  
+3. preload_lookups() ->loading as Df   4.calculate_dynamic_priority-->HIGH, 75, (40, 35, 0)
+5. CATEGORY GROUP MATCH {id,mapped_categ}   6. LIFECYCLE MATCH -->(today - sync_date) -->) 0–30 → NEW 31–60 → MID....
+7. Every product needs thresholds for:STR threshold,WOH threshold,Last Sale threshold
+Real-time example
+category_group_id = 3 (Apparel), lifecycle_id = 2 (Mid aged)
+Then threshold_map contains something like:
+(3,2): {
+   str_threshold: 30,
+   woh_threshold: 4,
+   last_sale_threshold: 45
+}
+
