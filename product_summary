@@ -1,1 +1,4 @@
+1. We create a progress bar with 8 tasks.{Load CSVs,Pivot EAV,Merge,Fix brand,Add status,Build categories,Add season,Export file}
+2. Workflow 1 → LOAD FULL DATAFRAME -->(read → store → concat → merge → filter
+Workflow 2 → PROCESS CHUNK BY CHUNK-->(read → process → write out → delete chunk)
 
