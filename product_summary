@@ -2,3 +2,15 @@
 2. Workflow 1 → LOAD FULL DATAFRAME -->(read → store → concat → merge → filter
 Workflow 2 → PROCESS CHUNK BY CHUNK-->(read → process → write out → delete chunk)
 
+Step 1 — Process varchar chunks → make full_varchar parquet
+
+→ merge to base
+→ delete all varchar temp files
+
+Step 2 — Process int chunks
+
+→ merge
+→ delete int temp files
+
+And so on.
+
