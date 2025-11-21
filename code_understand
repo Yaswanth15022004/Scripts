@@ -13,3 +13,16 @@ Then threshold_map contains something like:
    last_sale_threshold: 45
 }
 
+8. score ->If STR is LOWER than threshold,40 else 0 --> If WOH is HIGHER than threshold 35,0 -->last sale happened longer ago than threshold → product is not moving → risky → 25 points. --> score= all sum 3
+9. build_calendar_weeks_for_year(year) {2024-12-30 → 2025-01-05,2025-01-06 → 2025-01-12,2025-01-13 → 2025-01-19}     
+10. COLLECT YEARS” BLOCK   11. CSV HEADER + FILE CREATION
+12. We are fetching all sales of that week from FactSales table.
+13. agg_sales = sales_df.groupby(["product_key", "location_key"]).agg(...)  -->We want:total qty of the week,total revenue,last sale date
+14. join with dim_product and sales(additional_info)
+
+**15. Daily_inventory_status(sku+source)**  -->Fetch  week inventory forom that-->Get FIRST snapshot of weekof {sku+loc}, --> Sum all inventory updates(column) for week -->Merge first snapshot with sales
+This adds:sync_date,startinv
+16. closing_stock = startinv - sales_qty   17. STR% = (Sales / Closing Stock) × 100   18. WOH=Closing stock / Weekly sales
+19. PRIORITY ASSIGNMENT  = merged[ ["priority", "priority_score", "score_components", "cat_group_id", "lifecycle_id"] ]
+
+
