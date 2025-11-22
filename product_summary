@@ -37,3 +37,64 @@ cat_code_map
 id_to_name
 And reads the file generated in Block 5:TEMP/final_parquets/merged_after_varchar.parquet
 
+@7
+After Block 6 you have:enriched_after_varchar.parquet
+But your Magento product still needs:
+int attributes (e.g., status, sizes, color options, drops)
+decimal attributes (prices, weights)
+text attributes (description, meta-data)
+datetime attributes (created_at, updated_at)
+
+Flow becomes
+enriched_after_varchar.parquet
+    ↓ merge with int
+merged_after_int.parquet
+    ↓ merge with decimal
+merged_after_decimal.parquet
+    ↓ merge with text
+merged_after_text.parquet
+    ↓ merge with datetime
+merged_after_datetime.parquet  ← final result of Block 7
+
+@8
+csv file
+
+@9
+List folders to remove
+folders_to_delete = [
+    "TEMP/parquet_parts",
+    "TEMP/base",
+    "TEMP/final_parquets"
+]
+These folders contain:
+parquet temp parts (Block 3)
+base products (Block 5)
+merged pivot parquets (Block 7)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
