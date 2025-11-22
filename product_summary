@@ -1,16 +1,39 @@
-1. We create a progress bar with 8 tasks.{Load CSVs,Pivot EAV,Merge,Fix brand,Add status,Build categories,Add season,Export file}
-2. Workflow 1 → LOAD FULL DATAFRAME -->(read → store → concat → merge → filter
-Workflow 2 → PROCESS CHUNK BY CHUNK-->(read → process → write out → delete chunk)
+@1
+1. load small files 
 
-Step 1 — Process varchar chunks → make full_varchar parquet
+@2
+2. attribute map -->attr_map = { 93: "brand_name", 85: "price", ... }  
+3. brand_map = { 123: "Puma", 124: "Nike", 125: "Adidas" }
+4. category_map= cat_path_map = {    category_id : "Root / Men / Shoes / Sports Shoes"}   --> 5. status map 
 
-→ merge to base
-→ delete all varchar temp files
+@3
+1. TEMP / PARQUET folders
+2. pivot_eav_chunk_to_df() -->Pivot turns rows into columns. Each attribute_code becomes a column and each entity_id one row
+3. process_big_eav_to_parquet() --> We read the big CSV file in chunks 150000
 
-Step 2 — Process int chunks
+@4
+1. combine_parquet_parts(prefix)  -->prefix = "varchar" -->full_varchar.parquet -->Delete the temporary part file -->Repeat for all EAV types:
 
-→ merge
-→ delete int temp files
+@5
+1) Prepare BASE product table
+Only simple products
+Include parent relationship (parent_sku)
+Keep tiny set of columns
+Save as Parquet (Snappy)
+2) Read full_varchar.parquet in chunks
+3) Merge BASE + VARCHAR chunk safely
+4) Write output to a new Parquet file
+5) Delete full_varchar.parquet (cleanup)
 
-And so on.
+
+@6
+This block enriches your product data with:
+✔ brand labels✔ status text (Enabled/Disabled)✔ category path✔ L1 / L2 / L3✔ season✔ ALL IN CHUNKS (RAM-Safe)
+It uses the maps you built in Block 2:
+brand_map
+status_map
+cat_path_map
+cat_code_map
+id_to_name
+And reads the file generated in Block 5:TEMP/final_parquets/merged_after_varchar.parquet
 
